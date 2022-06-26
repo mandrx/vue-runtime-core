@@ -6581,6 +6581,7 @@ function warn(msg, ...args) {
         ]);
     }
     else {
+        console.log('[Test eStore Dependencies]');
         const warnArgs = [`[Vue warn]: ${msg}`, ...args];
         /* istanbul ignore if */
         if (trace.length &&
