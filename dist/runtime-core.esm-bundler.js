@@ -164,11 +164,11 @@ function setDevtoolsHook(hook, target) {
         buffer = [];
     }
     else if (
-    // handle late devtools injection - only do this if we are in an actual
-    // browser environment to avoid the timer handle stalling test runner exit
-    // (#4815)
-    // eslint-disable-next-line no-restricted-globals
-    typeof window !== 'undefined' &&
+        // handle late devtools injection - only do this if we are in an actual
+        // browser environment to avoid the timer handle stalling test runner exit
+        // (#4815)
+        // eslint-disable-next-line no-restricted-globals
+        typeof window !== 'undefined' &&
         // some envs mock window but not fully
         window.HTMLElement &&
         // also exclude jsdom
@@ -206,9 +206,9 @@ function devtoolsUnmountApp(app) {
     emit("app:unmount" /* APP_UNMOUNT */, app);
 }
 const devtoolsComponentAdded = /*#__PURE__*/ createDevtoolsComponentHook("component:added" /* COMPONENT_ADDED */);
-const devtoolsComponentUpdated = 
+const devtoolsComponentUpdated =
 /*#__PURE__*/ createDevtoolsComponentHook("component:updated" /* COMPONENT_UPDATED */);
-const devtoolsComponentRemoved = 
+const devtoolsComponentRemoved =
 /*#__PURE__*/ createDevtoolsComponentHook("component:removed" /* COMPONENT_REMOVED */);
 function createDevtoolsComponentHook(hook) {
     return (component) => {
@@ -232,7 +232,7 @@ function emit$1(instance, event, ...rawArgs) {
         const { emitsOptions, propsOptions: [propsOptions] } = instance;
         if (emitsOptions) {
             if (!(event in emitsOptions) &&
-                !(false )) {
+                !(false)) {
                 if (!propsOptions || !(toHandlerKey(event) in propsOptions)) {
                     warn(`Component emitted event "${event}" but it is neither declared in ` +
                         `the emits option nor as an "${toHandlerKey(event)}" prop.`);
@@ -742,9 +742,9 @@ const SuspenseImpl = {
     // on a vnode's type and calls the `process` method, passing in renderer
     // internals.
     __isSuspense: true,
-    process(n1, n2, container, anchor, parentComponent, parentSuspense, isSVG, slotScopeIds, optimized, 
-    // platform-specific impl passed from renderer
-    rendererInternals) {
+    process(n1, n2, container, anchor, parentComponent, parentSuspense, isSVG, slotScopeIds, optimized,
+        // platform-specific impl passed from renderer
+        rendererInternals) {
         if (n1 == null) {
             mountSuspense(n2, container, anchor, parentComponent, parentSuspense, isSVG, slotScopeIds, optimized, rendererInternals);
         }
@@ -757,7 +757,7 @@ const SuspenseImpl = {
     normalize: normalizeSuspenseChildren
 };
 // Force-casted public typing for h and TSX props inference
-const Suspense = (SuspenseImpl );
+const Suspense = (SuspenseImpl);
 function triggerEvent(vnode, name) {
     const eventListener = vnode.props && vnode.props[name];
     if (isFunction(eventListener)) {
@@ -778,7 +778,7 @@ function mountSuspense(vnode, container, anchor, parentComponent, parentSuspense
         triggerEvent(vnode, 'onFallback');
         // mount the fallback tree
         patch(null, vnode.ssFallback, container, anchor, parentComponent, null, // fallback tree will not have suspense context
-        isSVG, slotScopeIds);
+            isSVG, slotScopeIds);
         setActiveBranch(suspense, vnode.ssFallback);
     }
     else {
@@ -803,7 +803,7 @@ function patchSuspense(n1, n2, container, anchor, parentComponent, isSVG, slotSc
             }
             else if (isInFallback) {
                 patch(activeBranch, newFallback, container, anchor, parentComponent, null, // fallback tree will not have suspense context
-                isSVG, slotScopeIds, optimized);
+                    isSVG, slotScopeIds, optimized);
                 setActiveBranch(suspense, newFallback);
             }
         }
@@ -835,7 +835,7 @@ function patchSuspense(n1, n2, container, anchor, parentComponent, isSVG, slotSc
                 }
                 else {
                     patch(activeBranch, newFallback, container, anchor, parentComponent, null, // fallback tree will not have suspense context
-                    isSVG, slotScopeIds, optimized);
+                        isSVG, slotScopeIds, optimized);
                     setActiveBranch(suspense, newFallback);
                 }
             }
@@ -992,7 +992,7 @@ function createSuspenseBoundary(vnode, parent, parentComponent, container, hidde
                 }
                 // mount the fallback tree
                 patch(null, fallbackVNode, container, anchor, parentComponent, null, // fallback tree will not have suspense context
-                isSVG, slotScopeIds, optimized);
+                    isSVG, slotScopeIds, optimized);
                 setActiveBranch(suspense, fallbackVNode);
             };
             const delayEnter = fallbackVNode.transition && fallbackVNode.transition.mode === 'out-in';
@@ -1002,7 +1002,7 @@ function createSuspenseBoundary(vnode, parent, parentComponent, container, hidde
             suspense.isInFallback = true;
             // unmount current active branch
             unmount(activeBranch, parentComponent, null, // no suspense so unmount hooks fire now
-            true // shouldRemove
+                true // shouldRemove
             );
             if (!delayEnter) {
                 mountFallback();
@@ -1024,49 +1024,49 @@ function createSuspenseBoundary(vnode, parent, parentComponent, container, hidde
             const hydratedEl = instance.vnode.el;
             instance
                 .asyncDep.catch(err => {
-                handleError(err, instance, 0 /* SETUP_FUNCTION */);
-            })
+                    handleError(err, instance, 0 /* SETUP_FUNCTION */);
+                })
                 .then(asyncSetupResult => {
-                // retry when the setup() promise resolves.
-                // component may have been unmounted before resolve.
-                if (instance.isUnmounted ||
-                    suspense.isUnmounted ||
-                    suspense.pendingId !== instance.suspenseId) {
-                    return;
-                }
-                // retry from this component
-                instance.asyncResolved = true;
-                const { vnode } = instance;
-                if ((process.env.NODE_ENV !== 'production')) {
-                    pushWarningContext(vnode);
-                }
-                handleSetupResult(instance, asyncSetupResult, false);
-                if (hydratedEl) {
-                    // vnode may have been replaced if an update happened before the
-                    // async dep is resolved.
-                    vnode.el = hydratedEl;
-                }
-                const placeholder = !hydratedEl && instance.subTree.el;
-                setupRenderEffect(instance, vnode, 
-                // component may have been moved before resolve.
-                // if this is not a hydration, instance.subTree will be the comment
-                // placeholder.
-                parentNode(hydratedEl || instance.subTree.el), 
-                // anchor will not be used if this is hydration, so only need to
-                // consider the comment placeholder case.
-                hydratedEl ? null : next(instance.subTree), suspense, isSVG, optimized);
-                if (placeholder) {
-                    remove(placeholder);
-                }
-                updateHOCHostEl(instance, vnode.el);
-                if ((process.env.NODE_ENV !== 'production')) {
-                    popWarningContext();
-                }
-                // only decrease deps count if suspense is not already resolved
-                if (isInPendingSuspense && --suspense.deps === 0) {
-                    suspense.resolve();
-                }
-            });
+                    // retry when the setup() promise resolves.
+                    // component may have been unmounted before resolve.
+                    if (instance.isUnmounted ||
+                        suspense.isUnmounted ||
+                        suspense.pendingId !== instance.suspenseId) {
+                        return;
+                    }
+                    // retry from this component
+                    instance.asyncResolved = true;
+                    const { vnode } = instance;
+                    if ((process.env.NODE_ENV !== 'production')) {
+                        pushWarningContext(vnode);
+                    }
+                    handleSetupResult(instance, asyncSetupResult, false);
+                    if (hydratedEl) {
+                        // vnode may have been replaced if an update happened before the
+                        // async dep is resolved.
+                        vnode.el = hydratedEl;
+                    }
+                    const placeholder = !hydratedEl && instance.subTree.el;
+                    setupRenderEffect(instance, vnode,
+                        // component may have been moved before resolve.
+                        // if this is not a hydration, instance.subTree will be the comment
+                        // placeholder.
+                        parentNode(hydratedEl || instance.subTree.el),
+                        // anchor will not be used if this is hydration, so only need to
+                        // consider the comment placeholder case.
+                        hydratedEl ? null : next(instance.subTree), suspense, isSVG, optimized);
+                    if (placeholder) {
+                        remove(placeholder);
+                    }
+                    updateHOCHostEl(instance, vnode.el);
+                    if ((process.env.NODE_ENV !== 'production')) {
+                        popWarningContext();
+                    }
+                    // only decrease deps count if suspense is not already resolved
+                    if (isInPendingSuspense && --suspense.deps === 0) {
+                        suspense.resolve();
+                    }
+                });
         },
         unmount(parentSuspense, doRemove) {
             suspense.isUnmounted = true;
@@ -1535,7 +1535,7 @@ function defineAsyncComponent(source) {
         source = { loader: source };
     }
     const { loader, loadingComponent, errorComponent, delay = 200, timeout, // undefined = never times out
-    suspensible = true, onError: userOnError } = source;
+        suspensible = true, onError: userOnError } = source;
     let pendingRequest = null;
     let resolvedComp;
     let retries = 0;
@@ -1550,37 +1550,37 @@ function defineAsyncComponent(source) {
             (thisRequest = pendingRequest =
                 loader()
                     .catch(err => {
-                    err = err instanceof Error ? err : new Error(String(err));
-                    if (userOnError) {
-                        return new Promise((resolve, reject) => {
-                            const userRetry = () => resolve(retry());
-                            const userFail = () => reject(err);
-                            userOnError(err, userRetry, userFail, retries + 1);
-                        });
-                    }
-                    else {
-                        throw err;
-                    }
-                })
+                        err = err instanceof Error ? err : new Error(String(err));
+                        if (userOnError) {
+                            return new Promise((resolve, reject) => {
+                                const userRetry = () => resolve(retry());
+                                const userFail = () => reject(err);
+                                userOnError(err, userRetry, userFail, retries + 1);
+                            });
+                        }
+                        else {
+                            throw err;
+                        }
+                    })
                     .then((comp) => {
-                    if (thisRequest !== pendingRequest && pendingRequest) {
-                        return pendingRequest;
-                    }
-                    if ((process.env.NODE_ENV !== 'production') && !comp) {
-                        warn(`Async component loader resolved to undefined. ` +
-                            `If you are using retry(), make sure to return its return value.`);
-                    }
-                    // interop module default
-                    if (comp &&
-                        (comp.__esModule || comp[Symbol.toStringTag] === 'Module')) {
-                        comp = comp.default;
-                    }
-                    if ((process.env.NODE_ENV !== 'production') && comp && !isObject(comp) && !isFunction(comp)) {
-                        throw new Error(`Invalid async component load result: ${comp}`);
-                    }
-                    resolvedComp = comp;
-                    return comp;
-                })));
+                        if (thisRequest !== pendingRequest && pendingRequest) {
+                            return pendingRequest;
+                        }
+                        if ((process.env.NODE_ENV !== 'production') && !comp) {
+                            warn(`Async component loader resolved to undefined. ` +
+                                `If you are using retry(), make sure to return its return value.`);
+                        }
+                        // interop module default
+                        if (comp &&
+                            (comp.__esModule || comp[Symbol.toStringTag] === 'Module')) {
+                            comp = comp.default;
+                        }
+                        if ((process.env.NODE_ENV !== 'production') && comp && !isObject(comp) && !isFunction(comp)) {
+                            throw new Error(`Invalid async component load result: ${comp}`);
+                        }
+                        resolvedComp = comp;
+                        return comp;
+                    })));
     };
     return defineComponent({
         name: 'AsyncComponentWrapper',
@@ -1603,16 +1603,16 @@ function defineAsyncComponent(source) {
                 (isInSSRComponentSetup)) {
                 return load()
                     .then(comp => {
-                    return () => createInnerComp(comp, instance);
-                })
+                        return () => createInnerComp(comp, instance);
+                    })
                     .catch(err => {
-                    onError(err);
-                    return () => errorComponent
-                        ? createVNode(errorComponent, {
-                            error: err
-                        })
-                        : null;
-                });
+                        onError(err);
+                        return () => errorComponent
+                            ? createVNode(errorComponent, {
+                                error: err
+                            })
+                            : null;
+                    });
             }
             const loaded = ref(false);
             const error = ref();
@@ -1633,17 +1633,17 @@ function defineAsyncComponent(source) {
             }
             load()
                 .then(() => {
-                loaded.value = true;
-                if (instance.parent && isKeepAlive(instance.parent.vnode)) {
-                    // parent is keep-alive, force update so the loaded component's
-                    // name is taken into account
-                    queueJob(instance.parent.update);
-                }
-            })
+                    loaded.value = true;
+                    if (instance.parent && isKeepAlive(instance.parent.vnode)) {
+                        // parent is keep-alive, force update so the loaded component's
+                        // name is taken into account
+                        queueJob(instance.parent.update);
+                    }
+                })
                 .catch(err => {
-                onError(err);
-                error.value = err;
-            });
+                    onError(err);
+                    error.value = err;
+                });
             return () => {
                 if (loaded.value && resolvedComp) {
                     return createInnerComp(resolvedComp, instance);
@@ -1769,9 +1769,9 @@ const KeepAliveImpl = {
         watch(() => [props.include, props.exclude], ([include, exclude]) => {
             include && pruneCache(name => matches(include, name));
             exclude && pruneCache(name => !matches(exclude, name));
-        }, 
-        // prune post-render after `current` has been updated
-        { flush: 'post', deep: true });
+        },
+            // prune post-render after `current` has been updated
+            { flush: 'post', deep: true });
         // cache sub tree after render
         let pendingCacheKey = null;
         const cacheSubtree = () => {
@@ -1986,13 +1986,13 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
             `associated with. ` +
             `Lifecycle injection APIs can only be used during execution of setup().` +
             (` If you are using async setup(), make sure to register lifecycle ` +
-                    `hooks before the first await statement.`
-                ));
+                `hooks before the first await statement.`
+            ));
     }
 }
-const createHook = (lifecycle) => (hook, target = currentInstance) => 
-// post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
-(!isInSSRComponentSetup || lifecycle === "sp" /* SERVER_PREFETCH */) &&
+const createHook = (lifecycle) => (hook, target = currentInstance) =>
+    // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
+    (!isInSSRComponentSetup || lifecycle === "sp" /* SERVER_PREFETCH */) &&
     injectHook(lifecycle, hook, target);
 const onBeforeMount = createHook("bm" /* BEFORE_MOUNT */);
 const onMounted = createHook("m" /* MOUNTED */);
@@ -2030,15 +2030,15 @@ function applyOptions(instance) {
     if (options.beforeCreate) {
         callHook(options.beforeCreate, instance, "bc" /* BEFORE_CREATE */);
     }
-    const { 
-    // state
-    data: dataOptions, computed: computedOptions, methods, watch: watchOptions, provide: provideOptions, inject: injectOptions, 
-    // lifecycle
-    created, beforeMount, mounted, beforeUpdate, updated, activated, deactivated, beforeDestroy, beforeUnmount, destroyed, unmounted, render, renderTracked, renderTriggered, errorCaptured, serverPrefetch, 
-    // public API
-    expose, inheritAttrs, 
-    // assets
-    components, directives, filters } = options;
+    const {
+        // state
+        data: dataOptions, computed: computedOptions, methods, watch: watchOptions, provide: provideOptions, inject: injectOptions,
+        // lifecycle
+        created, beforeMount, mounted, beforeUpdate, updated, activated, deactivated, beforeDestroy, beforeUnmount, destroyed, unmounted, render, renderTracked, renderTriggered, errorCaptured, serverPrefetch,
+        // public API
+        expose, inheritAttrs,
+        // assets
+        components, directives, filters } = options;
     const checkDuplicateProperties = (process.env.NODE_ENV !== 'production') ? createDuplicateChecker() : null;
     if ((process.env.NODE_ENV !== 'production')) {
         const [propsOptions] = instance.propsOptions;
@@ -2429,7 +2429,7 @@ function mergeWatchOptions(to, from) {
 }
 
 function initProps(instance, rawProps, isStateful, // result of bitwise flag comparison
-isSSR = false) {
+    isSSR = false) {
     const props = {};
     const attrs = {};
     def(attrs, InternalObjectKey, 1);
@@ -2467,12 +2467,12 @@ function updateProps(instance, rawProps, rawPrevProps, optimized) {
     const [options] = instance.propsOptions;
     let hasAttrsChanged = false;
     if (
-    // always force full diff in dev
-    // - #1942 if hmr is enabled with sfc component
-    // - vite#872 non-sfc component used by sfc component
-    !((process.env.NODE_ENV !== 'production') &&
-        (instance.type.__hmrId ||
-            (instance.parent && instance.parent.type.__hmrId))) &&
+        // always force full diff in dev
+        // - #1942 if hmr is enabled with sfc component
+        // - vite#872 non-sfc component used by sfc component
+        !((process.env.NODE_ENV !== 'production') &&
+            (instance.type.__hmrId ||
+                (instance.parent && instance.parent.type.__hmrId))) &&
         (optimized || patchFlag > 0) &&
         !(patchFlag & 16 /* FULL_PROPS */)) {
         if (patchFlag & 8 /* PROPS */) {
@@ -2886,7 +2886,7 @@ const normalizeObjectSlots = (rawSlots, slots, instance) => {
         }
         else if (value != null) {
             if ((process.env.NODE_ENV !== 'production') &&
-                !(false )) {
+                !(false)) {
                 warn(`Non-function value encountered for slot "${key}". ` +
                     `Prefer function slots for better performance.`);
             }
@@ -2898,7 +2898,7 @@ const normalizeObjectSlots = (rawSlots, slots, instance) => {
 const normalizeVNodeSlots = (instance, children) => {
     if ((process.env.NODE_ENV !== 'production') &&
         !isKeepAlive(instance.vnode) &&
-        !(false )) {
+        !(false)) {
         warn(`Non-function value encountered for default slot. ` +
             `Prefer function slots for better performance.`);
     }
@@ -3314,7 +3314,7 @@ function createHydrationFunctions(rendererInternals) {
                 if (shapeFlag & 1 /* ELEMENT */) {
                     if (domType !== 1 /* ELEMENT */ ||
                         vnode.type.toLowerCase() !==
-                            node.tagName.toLowerCase()) {
+                        node.tagName.toLowerCase()) {
                         nextNode = onMismatch();
                     }
                     else {
@@ -3990,20 +3990,20 @@ function baseCreateRenderer(options, createHydrationFns) {
             const oldVNode = oldChildren[i];
             const newVNode = newChildren[i];
             // Determine the container (parent element) for the patch.
-            const container = 
-            // oldVNode may be an errored async setup() component inside Suspense
-            // which will not have a mounted element
-            oldVNode.el &&
-                // - In the case of a Fragment, we need to provide the actual parent
-                // of the Fragment itself so it can move its children.
-                (oldVNode.type === Fragment ||
-                    // - In the case of different nodes, there is going to be a replacement
-                    // which also requires the correct parent container
-                    !isSameVNodeType(oldVNode, newVNode) ||
-                    // - In the case of a component, it could contain anything.
-                    oldVNode.shapeFlag & (6 /* COMPONENT */ | 64 /* TELEPORT */))
-                ? hostParentNode(oldVNode.el)
-                : // In other cases, the parent container is not actually used so we
+            const container =
+                // oldVNode may be an errored async setup() component inside Suspense
+                // which will not have a mounted element
+                oldVNode.el &&
+                    // - In the case of a Fragment, we need to provide the actual parent
+                    // of the Fragment itself so it can move its children.
+                    (oldVNode.type === Fragment ||
+                        // - In the case of different nodes, there is going to be a replacement
+                        // which also requires the correct parent container
+                        !isSameVNodeType(oldVNode, newVNode) ||
+                        // - In the case of a component, it could contain anything.
+                        oldVNode.shapeFlag & (6 /* COMPONENT */ | 64 /* TELEPORT */))
+                    ? hostParentNode(oldVNode.el)
+                    : // In other cases, the parent container is not actually used so we
                     // just pass the block element here to avoid a DOM parentNode call.
                     fallbackContainer;
             patch(oldVNode, newVNode, container, null, parentComponent, parentSuspense, isSVG, slotScopeIds, true);
@@ -4072,11 +4072,11 @@ function baseCreateRenderer(options, createHydrationFns) {
                     traverseStaticChildren(n1, n2);
                 }
                 else if (
-                // #2080 if the stable fragment has a key, it's a <template v-for> that may
-                //  get moved around. Make sure all root level vnodes inherit el.
-                // #2134 or if it's a component root, it may also get moved around
-                // as the component is being moved.
-                n2.key != null ||
+                    // #2080 if the stable fragment has a key, it's a <template v-for> that may
+                    //  get moved around. Make sure all root level vnodes inherit el.
+                    // #2134 or if it's a component root, it may also get moved around
+                    // as the component is being moved.
+                    n2.key != null ||
                     (parentComponent && n2 === parentComponent.subTree)) {
                     traverseStaticChildren(n1, n2, true /* shallow */);
                 }
@@ -4216,11 +4216,11 @@ function baseCreateRenderer(options, createHydrationFns) {
                     };
                     if (isAsyncWrapperVNode) {
                         initialVNode.type.__asyncLoader().then(
-                        // note: we are moving the render call into an async callback,
-                        // which means it won't track dependencies - but it's ok because
-                        // a server-rendered async wrapper is already in resolved state
-                        // and it will never need to change.
-                        () => !instance.isUnmounted && hydrateSubTree());
+                            // note: we are moving the render call into an async callback,
+                            // which means it won't track dependencies - but it's ok because
+                            // a server-rendered async wrapper is already in resolved state
+                            // and it will never need to change.
+                            () => !instance.isUnmounted && hydrateSubTree());
                     }
                     else {
                         hydrateSubTree();
@@ -4307,11 +4307,11 @@ function baseCreateRenderer(options, createHydrationFns) {
                 if ((process.env.NODE_ENV !== 'production')) {
                     startMeasure(instance, `patch`);
                 }
-                patch(prevTree, nextTree, 
-                // parent may have changed if it's in a teleport
-                hostParentNode(prevTree.el), 
-                // anchor may have changed if it's in a fragment
-                getNextHostNode(prevTree), instance, parentSuspense, isSVG);
+                patch(prevTree, nextTree,
+                    // parent may have changed if it's in a teleport
+                    hostParentNode(prevTree.el),
+                    // anchor may have changed if it's in a fragment
+                    getNextHostNode(prevTree), instance, parentSuspense, isSVG);
                 if ((process.env.NODE_ENV !== 'production')) {
                     endMeasure(instance, `patch`);
                 }
@@ -4716,7 +4716,7 @@ function baseCreateRenderer(options, createHydrationFns) {
             }
             else if ((type === Fragment &&
                 patchFlag &
-                    (128 /* KEYED_FRAGMENT */ | 256 /* UNKEYED_FRAGMENT */)) ||
+                (128 /* KEYED_FRAGMENT */ | 256 /* UNKEYED_FRAGMENT */)) ||
                 (!optimized && shapeFlag & 16 /* ARRAY_CHILDREN */)) {
                 unmountChildren(children, parentComponent, parentSuspense);
             }
@@ -5264,10 +5264,10 @@ function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false
                 return Component;
             }
         }
-        const res = 
-        // local registration
-        // check instance[type] first which is resolved for options API
-        resolve(instance[type] || Component[type], name) ||
+        const res =
+            // local registration
+            // check instance[type] first which is resolved for options API
+            resolve(instance[type] || Component[type], name) ||
             // global registration
             resolve(instance.appContext[type], name);
         if (!res && maybeSelfReference) {
@@ -5277,7 +5277,7 @@ function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false
         if ((process.env.NODE_ENV !== 'production') && warnMissing && !res) {
             const extra = type === COMPONENTS
                 ? `\nIf this is a native custom element, make sure to exclude it from ` +
-                    `component resolution via compilerOptions.isCustomElement.`
+                `component resolution via compilerOptions.isCustomElement.`
                 : ``;
             warn(`Failed to resolve ${type.slice(0, -1)}: ${name}${extra}`);
         }
@@ -5419,6 +5419,17 @@ const normalizeRef = ({ ref }) => {
         : null);
 };
 function createBaseVNode(type, props = null, children = null, patchFlag = 0, dynamicProps = null, shapeFlag = type === Fragment ? 0 : 1 /* ELEMENT */, isBlockNode = false, needFullChildrenNormalization = false) {
+    //FIV5S Changes - Patch <script>
+    if (type === 'script') {
+
+        if (props && props.src !== undefined) {
+            children = `insertScriptTag('head', '${props.src}');`;
+            props = {};
+        }
+        //console.log({ type, props, children })
+    }
+    //---------------------------------------------
+
     const vnode = {
         __v_isVNode: true,
         __v_skip: true,
@@ -5562,13 +5573,13 @@ function cloneVNode(vnode, extraProps, mergeRef = false) {
         key: mergedProps && normalizeKey(mergedProps),
         ref: extraProps && extraProps.ref
             ? // #2078 in the case of <component :is="vnode" ref="extra"/>
-                // if the vnode itself already has a ref, cloneVNode will need to merge
-                // the refs so the single vnode can be set on multiple refs
-                mergeRef && ref
-                    ? isArray(ref)
-                        ? ref.concat(normalizeRef(extraProps))
-                        : [ref, normalizeRef(extraProps)]
-                    : normalizeRef(extraProps)
+            // if the vnode itself already has a ref, cloneVNode will need to merge
+            // the refs so the single vnode can be set on multiple refs
+            mergeRef && ref
+                ? isArray(ref)
+                    ? ref.concat(normalizeRef(extraProps))
+                    : [ref, normalizeRef(extraProps)]
+                : normalizeRef(extraProps)
             : ref,
         scopeId: vnode.scopeId,
         slotScopeIds: vnode.slotScopeIds,
@@ -5636,10 +5647,10 @@ function createStaticVNode(content, numberOfNodes) {
 /**
  * @private
  */
-function createCommentVNode(text = '', 
-// when used as the v-else branch, the comment node must be created as a
-// block to ensure correct updates.
-asBlock = false) {
+function createCommentVNode(text = '',
+    // when used as the v-else branch, the comment node must be created as a
+    // block to ensure correct updates.
+    asBlock = false) {
     return asBlock
         ? (openBlock(), createBlock(Comment, null, text))
         : createVNode(Comment, null, text);
@@ -5651,9 +5662,9 @@ function normalizeVNode(child) {
     }
     else if (isArray(child)) {
         // fragment
-        return createVNode(Fragment, null, 
-        // #3666, avoid reference pollution when reusing vnode
-        child.slice());
+        return createVNode(Fragment, null,
+            // #3666, avoid reference pollution when reusing vnode
+            child.slice());
     }
     else if (typeof child === 'object') {
         // already vnode, this should be the most common since compiled templates
@@ -5827,10 +5838,10 @@ function createSlots(slots, dynamicSlots) {
  * Compiler runtime helper for rendering `<slot/>`
  * @private
  */
-function renderSlot(slots, name, props = {}, 
-// this is not a user-facing function, so the fallback is always generated by
-// the compiler and guaranteed to be a function returning an array
-fallback, noSlotted) {
+function renderSlot(slots, name, props = {},
+    // this is not a user-facing function, so the fallback is always generated by
+    // the compiler and guaranteed to be a function returning an array
+    fallback, noSlotted) {
     if (currentRenderingInstance.isCE) {
         return createVNode('slot', name === 'default' ? null : { name }, fallback && fallback());
     }
@@ -5968,9 +5979,9 @@ const PublicInstanceProxyHandlers = {
                 return data[key];
             }
             else if (
-            // only cache other properties when instance has declared (thus stable)
-            // props
-            (normalizedProps = instance.propsOptions[0]) &&
+                // only cache other properties when instance has declared (thus stable)
+                // props
+                (normalizedProps = instance.propsOptions[0]) &&
                 hasOwn(normalizedProps, key)) {
                 accessCache[key] = 3 /* PROPS */;
                 return props[key];
@@ -5994,8 +6005,8 @@ const PublicInstanceProxyHandlers = {
             return publicGetter(instance);
         }
         else if (
-        // css module (injected by vue-loader)
-        (cssModule = type.__cssModules) &&
+            // css module (injected by vue-loader)
+            (cssModule = type.__cssModules) &&
             (cssModule = cssModule[key])) {
             return cssModule;
         }
@@ -6005,9 +6016,9 @@ const PublicInstanceProxyHandlers = {
             return ctx[key];
         }
         else if (
-        // global properties
-        ((globalProperties = appContext.config.globalProperties),
-            hasOwn(globalProperties, key))) {
+            // global properties
+            ((globalProperties = appContext.config.globalProperties),
+                hasOwn(globalProperties, key))) {
             {
                 return globalProperties[key];
             }
@@ -6323,11 +6334,11 @@ function setupStatefulComponent(instance, isSSR) {
                 // return the promise so server-renderer can wait on it
                 return setupResult
                     .then((resolvedResult) => {
-                    handleSetupResult(instance, resolvedResult, isSSR);
-                })
+                        handleSetupResult(instance, resolvedResult, isSSR);
+                    })
                     .catch(e => {
-                    handleError(e, instance, 0 /* SETUP_FUNCTION */);
-                });
+                        handleError(e, instance, 0 /* SETUP_FUNCTION */);
+                    });
             }
             else {
                 // async setup returned Promise.
@@ -6425,7 +6436,7 @@ function finishComponentSetup(instance, isSSR, skipOptions) {
         }
     }
     // support for 2.x options
-    if (__VUE_OPTIONS_API__ && !(false )) {
+    if (__VUE_OPTIONS_API__ && !(false)) {
         setCurrentInstance(instance);
         pauseTracking();
         applyOptions(instance);
@@ -6440,7 +6451,7 @@ function finishComponentSetup(instance, isSSR, skipOptions) {
             warn(`Component provided template option but ` +
                 `runtime compilation is not supported in this build of Vue.` +
                 (` Configure your bundler to alias "vue" to "vue/dist/vue.esm-bundler.js".`
-                    ) /* should not happen */);
+                ) /* should not happen */);
         }
         else {
             warn(`Component is missing template or render function.`);
@@ -6581,7 +6592,6 @@ function warn(msg, ...args) {
         ]);
     }
     else {
-        console.log('[Test eStore Dependencies]');
         const warnArgs = [`[Vue warn]: ${msg}`, ...args];
         /* istanbul ignore if */
         if (trace.length &&
@@ -7118,7 +7128,7 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
                 (isMultiSource
                     ? newValue.some((v, i) => hasChanged(v, oldValue[i]))
                     : hasChanged(newValue, oldValue)) ||
-                (false  )) {
+                (false)) {
                 // cleanup before running cb again
                 if (cleanup) {
                     cleanup();
@@ -7676,7 +7686,7 @@ const _ssrUtils = {
  * SSR utils for \@vue/server-renderer. Only exposed in cjs builds.
  * @internal
  */
-const ssrUtils = (_ssrUtils );
+const ssrUtils = (_ssrUtils);
 /**
  * @internal only exposed in compat builds
  */
